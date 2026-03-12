@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function CreateBlog() {
@@ -6,25 +6,52 @@ export default function CreateBlog() {
   const [summary, setSummary] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [content, setContent] = useState("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null); // State baru untuk menangkap error
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null); // Reset error setiap kali mulai submit
 
-    // Simulasi pengiriman data ke Backend (Prisma)
-    setTimeout(() => {
-      console.log("Data terkirim:", {
-        title,
-        summary,
-        image_url: imageUrl,
-        content,
-      });
+    try {
+      // Menembak API Backend dengan metode POST
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/blogs`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: title,
+            summary: summary,
+            image_url: imageUrl,
+            content: content,
+            author_id: Number(localStorage.getItem("userId")) || 1,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Gagal menerbitkan artikel ke database.",
+        );
+      }
+
+      // Jika berhasil
       alert("Artikel berhasil diterbitkan!");
+      navigate("/blogs"); // Kembali ke halaman daftar blog
+    } catch (err: any) {
+      console.error("Submit Error:", err);
+      setError(err.message);
+    } finally {
       setIsSubmitting(false);
-      navigate("/blogs"); // Kembali ke halaman daftar blog setelah sukses
-    }, 1500);
+    }
   };
 
   // Fungsi Logout sederhana
@@ -36,7 +63,7 @@ export default function CreateBlog() {
   return (
     <div className="bg-global font-display min-h-screen transition-colors duration-300 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Admin Editor */}
+        {/* Header Cancel dan Logout */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 pb-6 border-b-2 border-secondary/10">
           <div>
             <h1 className="text-3xl font-black text-primary tracking-tight">
@@ -65,7 +92,7 @@ export default function CreateBlog() {
           </div>
         </div>
 
-        {/* Form Editor */}
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="space-y-8 bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-secondary/10 relative overflow-hidden"
@@ -74,6 +101,13 @@ export default function CreateBlog() {
           <div className="absolute -top-20 -right-20 w-64 h-64 bg-background-primary/10 blur-[80px] rounded-full pointer-events-none"></div>
 
           <div className="relative z-10 space-y-6">
+            {/* Tempat Menampilkan Pesan Error */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-lg text-sm font-bold">
+                ⚠️ {error}
+              </div>
+            )}
+
             {/* Input Title */}
             <div>
               <label className="block text-sm font-bold text-primary mb-2">
@@ -128,13 +162,10 @@ export default function CreateBlog() {
               </div>
             </div>
 
-            {/* Input Content (Markdown/Rich Text Placeholder) */}
+            {/* Input Content */}
             <div>
               <label className="block text-sm font-bold text-primary mb-2 flex items-center justify-between">
                 <span>Main Content *</span>
-                <span className="text-xs font-normal text-secondary bg-secondary/10 px-2 py-0.5 rounded">
-                  Markdown Supported
-                </span>
               </label>
               <textarea
                 required

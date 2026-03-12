@@ -240,28 +240,6 @@ export default function About() {
           ))}
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="px-4 md:px-10 py-24 bg-primary text-center">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-global text-3xl md:text-5xl font-black mb-6">
-            Ready to work with the{" "}
-            <span className="text-background-primary">best?</span>
-          </h2>
-          <p className="text-global/70 max-w-2xl mx-auto mb-10 text-lg">
-            Join thousands of organizations that rely on ProCorp for their
-            strategic growth and professional excellence.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-background-primary text-primary font-bold px-10 py-4 rounded-lg hover:scale-105 transition-transform duration-300 shadow-lg shadow-background-primary/20 text-lg">
-              Get Started Today
-            </button>
-            <button className="border-2 border-global/20 text-global font-bold px-10 py-4 rounded-lg hover:border-background-primary hover:text-background-primary transition-colors duration-300 text-lg">
-              Contact Our Team
-            </button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

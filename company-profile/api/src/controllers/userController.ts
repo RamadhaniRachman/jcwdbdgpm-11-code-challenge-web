@@ -77,3 +77,45 @@ export const getUserById = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+/* ------------------------------- Login user ------------------------------ */
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1. Validasi input kosong
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email dan password wajib diisi!" });
+    }
+
+    // 2. Cari user berdasarkan email
+    const user = await prisma.users.findFirst({
+      where: { email: email },
+    });
+
+    // 3. Jika user tidak ditemukan
+    if (!user) {
+      return res.status(404).json({ message: "Email tidak terdaftar." });
+    }
+
+    // 4. Cocokkan password (Di sistem dunia nyata , sebaiknya gunakan bcrypt untuk mengecek hash. Tapi karena ribet jadi ini aja hehe)
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Password salah!" });
+    }
+
+    // 5. Jika sukses, kirim respons (jangan kirim password kembali ke frontend/ pw false)
+    res.status(200).json({
+      message: "Login berhasil",
+      data: {
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

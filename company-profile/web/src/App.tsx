@@ -1,5 +1,4 @@
-// src/App.tsx
-import { ReactNode } from "react"; // <-- 1. Tambahkan import ini
+import { ReactNode } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,8 +16,9 @@ import BlogDetail from "./pages/BlogDetail";
 import CreateBlog from "./pages/CreateBlog";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ScrollToTop from "./components/ScrollToTop";
 
-// --- Komponen Protected Route (Satpam Rute) ---
+// Komponen Protected Route (Satpam Rute)
 // 2. Ubah JSX.Element menjadi ReactNode
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
@@ -33,6 +33,7 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="grow">

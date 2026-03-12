@@ -131,28 +131,6 @@ export default function Teams() {
           </div>
         )}
       </section>
-
-      {/* Call to Action Section */}
-      <section className="bg-primary py-20 relative overflow-hidden">
-        {/* Dekorasi Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-64 bg-background-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
-
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <h2 className="text-global text-3xl md:text-5xl font-black leading-tight mb-6">
-            Ready to make an{" "}
-            <span className="text-background-primary">impact?</span>
-          </h2>
-          <p className="text-global/70 text-lg mb-10 max-w-2xl mx-auto">
-            We are always looking for talented individuals to join our growing
-            consulting firm. Explore our culture and available roles.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-background-primary text-primary px-10 py-4 rounded-lg font-bold hover:scale-105 transition-transform duration-300 text-lg shadow-lg shadow-background-primary/20">
-              Join Our Team
-            </button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

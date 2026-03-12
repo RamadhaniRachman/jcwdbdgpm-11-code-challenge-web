@@ -1,40 +1,66 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Tambahan state loading
   const navigate = useNavigate();
 
-  const handleLogin = (e: FormEvent) => {
+  const handleLogin = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
-    // Simulasi validasi sederhana
-    if (email === "admin@procorp.com" && password === "admin123") {
-      // Simpan token/status ke localStorage
+    try {
+      // Tembak API Login di Backend Anda
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Lemparkan error dari backend (misal: "Password salah!" atau "Email tidak terdaftar")
+        throw new Error(data.message || "Gagal melakukan login.");
+      }
+
+      // Jika berhasil login:
+      // 1. Simpan status autentikasi
       localStorage.setItem("isAuthenticated", "true");
-      // Arahkan ke halaman Create Blog
+
+      // 2. Simpan ID User agar bisa dipakai saat Create Blog nanti
+      if (data.data && data.data.id) {
+        localStorage.setItem("userId", data.data.id.toString());
+      }
+
+      // 3. Arahkan ke halaman Create Blog
       navigate("/create-blog");
-    } else {
-      setError("Email atau password salah. Coba: admin@procorp.com / admin123");
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    // Background halaman diberi sedikit abu-abu (bg-secondary/5) agar card putihnya menonjol
     <div className="bg-secondary/5 font-display min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-md w-full relative">
-        {/* Efek Glow Mint di belakang form */}
         <div className="absolute -inset-1 bg-background-primary/40 blur-xl rounded-2xl pointer-events-none"></div>
 
-        {/* Card diubah ke bg-global (Putih) */}
         <div className="relative bg-global rounded-2xl p-8 md:p-10 shadow-xl border border-secondary/10">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center size-12 rounded-full bg-background-primary text-primary mb-4 shadow-lg shadow-background-primary/20">
               <span className="material-symbols-outlined text-2xl">lock</span>
             </div>
-            {/* Teks diubah ke text-primary (Gelap) */}
             <h2 className="text-3xl font-black text-primary tracking-tight">
               Welcome Back
             </h2>
@@ -45,7 +71,7 @@ export default function Login() {
 
           <form onSubmit={handleLogin} className="space-y-6">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm text-center font-medium">
+              <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm text-center font-medium animate-pulse">
                 {error}
               </div>
             )}
@@ -60,7 +86,6 @@ export default function Login() {
                     mail
                   </span>
                 </div>
-                {/* Input background putih transparan dengan border abu-abu */}
                 <input
                   type="email"
                   required
@@ -86,7 +111,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-white border-2 border-secondary/20 rounded-lg text-primary placeholder-secondary/50 focus:border-background-primary focus:ring-1 focus:ring-background-primary outline-none transition-all"
-                  placeholder="admin123"
+                  placeholder="••••••••"
                 />
               </div>
             </div>
@@ -109,9 +134,21 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full bg-background-primary text-primary font-bold py-3.5 px-4 rounded-lg hover:scale-[1.02] shadow-lg shadow-background-primary/30 transition-all duration-300"
+              disabled={isLoading}
+              className={`w-full bg-background-primary text-primary font-bold py-3.5 px-4 rounded-lg shadow-lg shadow-background-primary/30 transition-all duration-300 flex justify-center items-center gap-2 ${
+                isLoading
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:scale-[1.02]"
+              }`}
             >
-              Sign In
+              {isLoading ? (
+                <>
+                  <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary"></span>
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
 

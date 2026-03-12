@@ -33,9 +33,6 @@ export default function Home() {
               >
                 Get Started Today
               </a>
-              <button className="rounded-lg border-2 border-primary px-8 py-4 text-sm font-bold text-primary hover:bg-background-primary/20 transition-colors">
-                Contact Us
-              </button>
             </div>
           </div>
           <div className="relative aspect-video overflow-hidden rounded-2xl shadow-2xl lg:aspect-square">
@@ -164,7 +161,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
               Client Success Stories
             </h2>
-            {/* Teks hijau mint terlihat sangat cantik di atas background hitam */}
+            {/* Teks hijau mint di atas background hitam */}
             <p className="mt-4 text-background-primary font-medium tracking-wide">
               Real feedback from leaders who trust ProCorp
             </p>
@@ -222,33 +219,6 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter/CTA */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="rounded-3xl bg-primary p-12 text-center text-global shadow-2xl relative overflow-hidden">
-          {/* Efek glow di belakang CTA */}
-          <div className="absolute -top-24 -right-24 size-64 bg-background-primary/20 blur-3xl rounded-full"></div>
-          <div className="relative z-10">
-            <h2 className="text-3xl font-black text-background-primary md:text-4xl">
-              Ready to Scale Your Business?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-global/80">
-              Join 500+ successful companies that have partnered with ProCorp
-              for strategic excellence.
-            </p>
-            <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-              <input
-                className="min-w-75 rounded-lg border border-secondary/50 bg-secondary/20 px-6 py-4 text-global placeholder-global/50 focus:border-background-primary focus:ring-1 focus:ring-background-primary outline-none"
-                placeholder="Enter your business email"
-                type="email"
-              />
-              <button className="rounded-lg bg-background-primary px-10 py-4 font-bold text-primary transition-transform hover:scale-105">
-                Join Now
-              </button>
             </div>
           </div>
         </div>

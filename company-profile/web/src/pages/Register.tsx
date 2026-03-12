@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
@@ -10,11 +10,11 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e: FormEvent) => {
+  const handleRegister = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
 
-    // Validasi sederhana
+    // 1. Validasi Frontend
     if (password !== confirmPassword) {
       setError("Password dan Konfirmasi Password tidak cocok!");
       return;
@@ -27,17 +27,46 @@ export default function Register() {
 
     setIsLoading(true);
 
-    // Simulasi pengiriman data ke Backend (Prisma: prisma.users.create({...}))
-    setTimeout(() => {
-      console.log("Data User Baru:", { fullname, email, password });
+    try {
+      // 2. Tembak API Register di Backend
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullname,
+            email,
+            password,
+          }),
+        },
+      );
 
-      // Simulasi sukses: Kita langsung "login"-kan user setelah berhasil daftar
+      const data = await response.json();
+
+      // 3. Tangani Error dari Backend
+      if (!response.ok) {
+        throw new Error(data.message || "Gagal membuat akun.");
+      }
+
+      // 4. Jika Sukses (Auto-Login)
       localStorage.setItem("isAuthenticated", "true");
 
-      setIsLoading(false);
+      // Simpan ID User agar bisa digunakan saat Create Blog
+      if (data.data && data.data.id) {
+        localStorage.setItem("userId", data.data.id.toString());
+      }
+
       alert("Registrasi berhasil! Selamat datang di ProCorp.");
       navigate("/create-blog"); // Langsung arahkan ke dashboard/create blog
-    }, 1500);
+    } catch (err: any) {
+      console.error("Register Error:", err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,7 +76,7 @@ export default function Register() {
         {/* Efek Glow Mint di belakang form */}
         <div className="absolute -inset-1 bg-background-primary/40 blur-xl rounded-2xl pointer-events-none"></div>
 
-        {/* Card diubah ke bg-global (Putih) */}
+        {/* Card bg-global (Putih) */}
         <div className="relative bg-global rounded-2xl p-8 md:p-10 shadow-xl border border-secondary/10">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center size-12 rounded-full bg-background-primary text-primary mb-4 shadow-lg shadow-background-primary/20">
@@ -55,7 +84,6 @@ export default function Register() {
                 person_add
               </span>
             </div>
-            {/* Teks diubah ke text-primary (Gelap) */}
             <h2 className="text-3xl font-black text-primary tracking-tight">
               Create Account
             </h2>
