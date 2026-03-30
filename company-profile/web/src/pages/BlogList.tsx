@@ -29,14 +29,13 @@ const formatDate = (isoString?: string | null): string => {
 export default function BlogList() {
   // 2. Siapkan State untuk menyimpan data dari database
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [totalEvents, setTotalEvents] = useState(0);
+  const [_, setIsLoading] = useState<boolean>(true); // apabila use state tidak dipakai bisa ditambah underscore pada bagian state yg tidak terpakai
+  const [_error, setError] = useState<string | null>(null);
+  const [searchParams, _setSearchParams] = useSearchParams();
+  const [_totalEvents, _setTotalEvents] = useState(0);
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 3;
   const offset = (page - 1) * limit;
-  const totalPages = Math.ceil(totalEvents / limit);
 
   // 3. Gunakan useEffect untuk menarik data (Fetch API) saat halaman pertama kali dimuat
   useEffect(() => {
@@ -85,7 +84,7 @@ export default function BlogList() {
       {/* Hero Section */}
       <section className="relative py-20 bg-primary overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-primary via-primary/90 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-global">
           <div className="max-w-2xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6">

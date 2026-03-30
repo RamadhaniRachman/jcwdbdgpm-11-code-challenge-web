@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 export default function Services() {
   return (
     <div className="bg-global font-display transition-colors duration-300">
@@ -197,7 +195,7 @@ export default function Services() {
               Perfect for early-stage companies looking for structural
               foundations.
             </p>
-            <ul className="space-y-4 mb-10 flex-grow">
+            <ul className="space-y-4 mb-10 grow">
               {[
                 "Quarterly Strategy Review",
                 "Market Analysis Reports",
@@ -272,7 +270,7 @@ export default function Services() {
             <p className="text-sm text-secondary mb-8 h-10">
               Bespoke solutions for global organizations with complex needs.
             </p>
-            <ul className="space-y-4 mb-10 flex-grow">
+            <ul className="space-y-4 mb-10 grow">
               {[
                 "Full-time On-site Consulting",
                 "Custom Tech Integration",
