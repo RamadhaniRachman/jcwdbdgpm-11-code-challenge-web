@@ -1,4 +1,4 @@
-import avatar from "../assets/Profile.png"; // sesuaikan nama file
+import avatar from "../assets/profile.png"; // sesuaikan nama file
 
 export default function Hero() {
   return (
