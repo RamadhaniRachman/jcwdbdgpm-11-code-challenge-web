@@ -1,6 +1,6 @@
 import Github from "../assets/github.png";
 import Gmail from "../assets/gmail.png";
-import LinkedIn from "../assets/linkedin.png";
+import LinkedIn from "../assets/linkedIn.png";
 import React, { useState } from "react";
 
 export default function Contact() {
